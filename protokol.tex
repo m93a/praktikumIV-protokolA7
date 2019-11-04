@@ -29,6 +29,7 @@
 \usepackage{graphicx}
 \usepackage{lmodern}
 \usepackage{amsmath}
+\usepackage{hyperref}
 \usepackage[top = 2cm, bottom = 2cm, left = 2cm, right = 2cm]{geometry}
 
 % Pro titulní stránku
@@ -42,6 +43,8 @@
 \usepackage{epstopdf}
 \usepackage{csvsimple}
 
+
+\renewcommand{\U}[1]{\ensuremath{\mathrm{#1}}}
 
 \newcommand{\titjmeno}{Michal Grňo}
 \newcommand{\titobor}{FOF}
@@ -61,7 +64,7 @@
 \begin{enumerate}
     \item Poté, co vyučující umístí silnější zářič ${}^{22}$Na do stojánku, změřte úhlové rozdělení koincidencí v oblasti úhlů potřebné pro nalezení polohy zářiče, doba měření 20s. Vysvětlete tvar naměřeného úhlového rozdělení, získané poznatky využijte při domácím zpracování.
 
-    \item Změřte četnost koincidencí pro úhly $\phi$ = 60°, 90°, 120° bez plechu a 120° s Pb plechem mezi detektory, doba měření 100s. Vysvětlete pozorované četnosti.
+    \item Změřte četnost koincidencí pro úhly $\varphi$ = 60°, 90°, 120° bez plechu a 120° s Pb plechem mezi detektory, doba měření 100s. Vysvětlete pozorované četnosti.
     
     \item Poté, co vyučující přidá do krabičky druhý zářič, změřte úhlové rozdělení koincidencí s krokem 5°.
     
@@ -76,11 +79,10 @@
 
 
 \section{Teoretická část}
-Teorie\cite{DUMMY:1}
-\begin{equation*}
-    A = 4
-    \label{A}
-\end{equation*}
+Účelem práce je použít pozitronovou emisní tomografii (PET) k určení umístění radioaktivního vzorku uvnitř modelu lebky.
+PET využívá radionuklidů s $\beta^+$ rozpadem, tedy takových, které při rozpadu produkují pozitron – ten se po rozpadu v okolní látce zpomalí téměř do klidu (na vzdálenosti řádu $1 \U{mm}$) a potom anihiluje s nějakým elektronem. Výsledkem anihilace jsou dva fotony letící téměř přesně opačným směrem. \cite{studijni-text}
+
+Po obvodu kolem krabičky se vzorky jsou umístěny dva detektory v koincidenčním zapojení – tzn. že zaznamenají pouze, když do obou přiletí foton téměř zároveň. Je žádoucí, aby byl časový interval mezi příchozími fotony co nejmenší. Současná technika je schopna dosáhnout intervalů $10^{-6}$ až $10^{-12} \U{s}$. \cite{studijni-text} Čím delší je interval, tím je aparatura náchylnější na šum.
 
 \begin{figure}[h]
     \centering
@@ -88,9 +90,25 @@ Teorie\cite{DUMMY:1}
     \caption{Schéma koincidenčního měření, převzato z [1].}
 \end{figure}
 
+V našem experimentu byl jeden detektor (A) nepohyblivý a druhým detektorem (B) bylo možné pohybovat po kružnici se středem uprostřed vzorku. Polohu detektoru B popisujeme úhlem $\varphi$ měřeným v kladném směru od polohy naproti detektoru A. Oba detektory jsou umístěny ve vzdálenosti $R$ od středu vzorku. Samotným vzorkem lze otáčet kolem středu, jeho otočení popisujeme úhlem $\psi$.
+
+Vztažnou sosutavu vzorku popisujeme souřadnicemi $x, y$. V této souřadné soustavě budou mít detektory A a B souřadnice:
+\begin{gather}
+    \begin{aligned}
+        x_A &= -R \cos \psi & x_B &= R \cos(\psi + \varphi)\\
+        y_A &= -R \sin \psi & y_B &= R \sin(\psi + \varphi)
+    \end{aligned}
+    \label{detektory-xy}
+\end{gather}
+Přímka mezi detektory, na které bude ležet zářič, je popsaná rovnicí
+\begin{equation}
+    (y_b - y_a)x + (x_a - x_b)y = (y_b - y_a)x_a + (x_a - x_b)y_a
+    \label{primka-xy}
+\end{equation}
+
 
 \section{Výsledky měření}
-Naměřil jsem 3.
+Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné hodnoty $\psi$ jsme proměřili několik hodnot $\varphi$, naměřené hodnoty jsou v grafu \ref{graf-1vz}. Naměřenými daty byla pomocí metody nejmenších čtverců\footnote{Teoreticky správné by bylo použít Poissonovu regresi, metoda nejmenších čtverců je ale stále dobrou aproximací.} proložena gaussova křivka. Maxima pro jednotlivé hodnoty $\psi$ i s chybou fitu jsou v tabulce \ref{tab-fity-1vz}.
 
 
 \begin{table}[h!]
@@ -108,7 +126,7 @@ Naměřil jsem 3.
         }
     \end{tabular}
 
-    \caption{Úhly získané regresí}
+    \caption{Úhly získané regresí, 1 zářič}
     \label{tab-fity-1vz}
 \end{table}
 
@@ -133,8 +151,8 @@ Naměřil jsem 3.
         }
     \end{tabular}
     
-    \caption{Úhly získané regresí}
-    \label{tab-fity-1vz}
+    \caption{Úhly získané regresí, 2 zářiče}
+    \label{tab-fity-2vz}
 \end{table}
 
 
@@ -204,7 +222,7 @@ Naměřil jsem 3.
 
     \end{gnuplot}
 
-    \caption{Naměřené koincidence, jednovzorkový setup}
+    \caption{Naměřené koincidence, 1 zářič}
     \label{graf-1vz}
 \end{figure}
 
@@ -234,6 +252,9 @@ Naměřil jsem 3.
             f(x) lc palette cb 0 dashtype ' _ ' notitle
 
     \end{gnuplot}
+
+    \caption{Nestíněné vs. stíněné detektory}
+    \label{nestin-vs-stin}
 \end{figure}
 
 
@@ -309,11 +330,12 @@ Naměřil jsem 3.
 
     \end{gnuplot}
 
-    \caption{Naměřené koincidence, dvouvzorkový setup}
+    \caption{Naměřené koincidence, 2 zářiče}
     \label{graf-2vz}
 \end{figure}
 
 \begin{figure}[p]
+    \centering
     \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
 
         load 'matlib.cfg'
@@ -384,7 +406,7 @@ Naměřil jsem 3.
 
         # vypočítej průsečíky druhého
 
-        N = nCr(|psi|, 2) + 1
+        N = nCr(|psi|, 2)
         array xintB[N]
         array yintB[N]
 
@@ -417,20 +439,23 @@ Naměřil jsem 3.
         set xrange [-0.5:0.5]
         set yrange [-0.5:0.5]
         
-        set title "Jednovzorkový setup"
+        set title "1 zářič"
         plot \
-            sample [i=2:|xintA|] '+' using (xintA[i]):(yintA[i]) notitle \
+            sample [i=1:|xintA|] '+' using (xintA[i]):(yintA[i]) notitle \
             @plnA
 
         unset ylabel
         
-        set title "Dvouvzorkový setup"
+        set title "2 zářiče"
         plot \
-            sample [i=2:|xintB|] '+' using (xintB[i]):(yintB[i]) notitle \
+            sample [i=1:|xintB|] '+' using (xintB[i]):(yintB[i]) notitle \
             @plnB
 
         
     \end{gnuplot}
+
+    \caption{Průsečíky vypočtených přímek}
+    \label{graf-pruseciky}
 \end{figure}
 
 
