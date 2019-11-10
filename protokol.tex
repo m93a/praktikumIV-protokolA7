@@ -30,6 +30,7 @@
 \usepackage{lmodern}
 \usepackage{amsmath}
 \usepackage{hyperref}
+\usepackage{gensymb}
 \usepackage[top = 2cm, bottom = 2cm, left = 2cm, right = 2cm]{geometry}
 
 % Pro titulní stránku
@@ -44,7 +45,8 @@
 \usepackage{csvsimple}
 
 
-\renewcommand{\U}[1]{\ensuremath{\mathrm{#1}}}
+\renewcommand{\U}[1]{\ensuremath{\,\mathrm{#1}}}
+\newcommand{\°}{\degree}
 
 \newcommand{\titjmeno}{Michal Grňo}
 \newcommand{\titobor}{FOF}
@@ -108,7 +110,7 @@ Přímka mezi detektory, na které bude ležet zářič, je popsaná rovnicí
 
 
 \section{Výsledky měření}
-Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné hodnoty $\psi$ jsme proměřili několik hodnot $\varphi$, naměřené hodnoty jsou v grafu \ref{graf-1vz}. Naměřenými daty byla pomocí metody nejmenších čtverců\footnote{Teoreticky správné by bylo použít Poissonovu regresi, metoda nejmenších čtverců je ale stále dobrou aproximací.} proložena gaussova křivka. Maxima pro jednotlivé hodnoty $\psi$ i s chybou fitu jsou v tabulce \ref{tab-fity-1vz}.
+Nejprve jsme s $t=20\U{s}$ měřili koincidence pro vzorek s jedním zářičem. Pro pevné hodnoty $\psi$ jsme proměřili několik hodnot $\varphi$, naměřené hodnoty jsou v grafu na obr. č. \ref{graf-1vz}. Naměřenými daty byla pomocí metody nejmenších čtverců\footnote{Teoreticky správné by bylo použít Poissonovu regresi, metoda nejmenších čtverců je ale stále dobrou aproximací.} proložena gaussova křivka. Maxima pro jednotlivé hodnoty $\psi$ i s chybou fitu jsou v tabulce č. \ref{tab-fity-1vz}.
 
 
 \begin{table}[h!]
@@ -128,31 +130,6 @@ Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné ho
 
     \caption{Úhly získané regresí, 1 zářič}
     \label{tab-fity-1vz}
-\end{table}
-
-
-\begin{table}[h!]
-    \centering
-    \begin{tabular}{r|r|r|r|r}
-        % Hlavička
-        \bfseries $\psi$ &
-        \bfseries $\varphi_1$ &
-        \bfseries $\Delta\varphi_1$ &
-        \bfseries $\varphi_2$ &
-        \bfseries $\Delta\varphi_2$
-
-        % Soubor
-        \csvreader[ head to column names ]{fits3.csv.tmp}{}
-        {
-            \csviffirstrow{\\\hline}{\\}
-            \psival\ &
-            \phiA & \phiAerr &
-            \phiB & \phiBerr
-        }
-    \end{tabular}
-    
-    \caption{Úhly získané regresí, 2 zářiče}
-    \label{tab-fity-2vz}
 \end{table}
 
 
@@ -227,6 +204,8 @@ Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné ho
 \end{figure}
 
 
+Následně jsme pro fixní $\psi=0\°$ proměřili koincidence při $t=100\U{s}$ na $\varphi=60\°, 90\°, 120\°$. Poté jsme oba detektory zastínili olověnou deskou a znovu změřili počet koincidencí při $\varphi=120\°$. Naměřené výsledky jsou v grafu na obr. č. \ref{nestin-vs-stin}. Z dat je zřejmé, že šum způsobený samotnou aparaturou (tj. hodnota naměřená po odstínění) je výrazně nižší, než šum přicházející od vzorku. Mírný růst počtu koincidencí při přibližování detektorů může být buď důsledkem Comptonova jevu, anebo čistě náhodný.
+
 \begin{figure}[p]
     \centering
     \begin{gnuplot}[terminal=epslatex,terminaloptions=color]
@@ -257,6 +236,31 @@ Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné ho
     \label{nestin-vs-stin}
 \end{figure}
 
+Poté jsme odebrali olověnou desku a do vzorku přidali druhý zářič. Pro každou hodnotu $\psi = 0\°, 60\°, 90\°$ jsme při $t=20\U{s}$ opět proměřili počet koincidencí pro různá $\varphi$. Naměřené hodnoty jsou v grafu na obr. č. \ref{graf-2vz}. Data jsme proložili součtem dvou gaussových křivek, tím získané peaky $\varphi_1$ a $\varphi_2$ jsou v tabulce č. \ref{tab-fity-2vz}.
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{r|r|r|r|r}
+        % Hlavička
+        \bfseries $\psi$ &
+        \bfseries $\varphi_1$ &
+        \bfseries $\Delta\varphi_1$ &
+        \bfseries $\varphi_2$ &
+        \bfseries $\Delta\varphi_2$
+
+        % Soubor
+        \csvreader[ head to column names ]{fits3.csv.tmp}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \psival\ &
+            \phiA & \phiAerr &
+            \phiB & \phiBerr
+        }
+    \end{tabular}
+    
+    \caption{Úhly získané regresí, 2 zářiče}
+    \label{tab-fity-2vz}
+\end{table}
 
 \begin{figure}[p]
     \centering
@@ -451,6 +455,44 @@ Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné ho
             sample [i=1:|xintB|] '+' using (xintB[i]):(yintB[i]) notitle \
             @plnB
 
+        unset multiplot
+
+
+        # zapiš do souboru
+
+        set terminal dumb
+
+        f(x) = -(0.7*x + 0.1)/0.2
+        g(x) = f(x) + 0.7
+        h(x) = x
+
+        conditionA(x, y) = y > f(x) && y < g(x) && y < h(x)
+        conditionB(x, y) = y > f(x) && y < g(x) && y > h(x)
+        
+        set print 'int1.csv.tmp'
+        print "x, y"
+
+        do for [i=1:|xintA|] {
+            print sprintf("%f, %f", xintA[i], yintA[i])
+        }
+
+        set print 'int2A.csv.tmp'
+        print "x, y"
+
+        do for [i=1:|xintB|] {
+            if (conditionA(xintB[i], yintB[i])) {
+                print sprintf("%f, %f", xintB[i], yintB[i])
+            }
+        }
+
+        set print 'int2B.csv.tmp'
+        print "x, y"
+
+        do for [i=1:|xintB|] {
+            if (conditionB(xintB[i], yintB[i])) {
+                print sprintf("%f, %f", xintB[i], yintB[i])
+            }
+        }
         
     \end{gnuplot}
 
@@ -458,13 +500,70 @@ Nejprve jsme měřili koincidence pro vzorek s jedním zářičem. Pro pevné ho
     \label{graf-pruseciky}
 \end{figure}
 
+Podle údajů v tabulkách \ref{tab-fity-1vz} a \ref{tab-fity-2vz} jsme určili rovnice přímek, na kterých musí ležet zářiče, tyto přímky jsme vynesli do grafů na obr. č. \ref{graf-pruseciky}. Na grafu 2 zářičů lze pozorovat i falešné průsečíky, které vznikají mezi přímkami pocházejícími od různých zářičů. Ze souřadnic průsečíků jsme vypočetli průměrné souřadnice a chybu průměru. Ty jsou v tabulce č. \ref{tab-average-pts}.
+
+\begin{gnuplot}[terminal=epslatex,terminaloptions=color]
+
+    stats 'int1.csv.tmp'
+    x1 = STATS_mean_x
+    y1 = STATS_mean_y
+    x1err = STATS_mean_err_x
+    y1err = STATS_mean_err_y
+
+    stats 'int2A.csv.tmp'
+    x2A = STATS_mean_x
+    y2A = STATS_mean_y
+    x2Aerr = STATS_mean_err_x
+    y2Aerr = STATS_mean_err_y
+
+    stats 'int2B.csv.tmp'
+    x2B = STATS_mean_x
+    y2B = STATS_mean_y
+    x2Berr = STATS_mean_err_x
+    y2Berr = STATS_mean_err_y
+
+    set print "average_pts.csv.tmp"
+    print "x, xerr, y, yerr, note"
+    print sprintf("%.3f, %.3f, %.3f, %.3f, Jednozáříčový setup", x1, x1err, y1, y1err)
+    print sprintf("%.3f, %.3f, %.3f, %.3f, Dvouzářičový setup; zářič A", x2A, x2Aerr, y2A, y2Aerr)
+    print sprintf("%.3f, %.3f, %.3f, %.3f, Dvouzářičový setup; zářič B", x2B, x2Berr, y2B, y2Berr)
+
+\end{gnuplot}
+
+\begin{table}[h!]
+    \centering
+    \begin{tabular}{r|r|r|r|l}
+        % Hlavička
+        \bfseries $x$ &
+        \bfseries $\Delta x$ &
+        \bfseries $y$ &
+        \bfseries $\Delta y$ &
+        \bfseries pozn.
+
+        % Soubor
+        \csvreader[ head to column names ]{average_pts.csv.tmp}{}
+        {
+            \csviffirstrow{\\\hline}{\\}
+            \x & \xerr &
+            \y & \yerr &
+            \note
+        }
+    \end{tabular}
+    
+    \caption{Průměrné polohy středů zářičů}
+    \label{tab-average-pts}
+\end{table}
+
+\pagebreak
 
 \section{Diskuse}
-Bylo to špatně protože \eqref{A} 
+Při zpracování dat bylo využito předpokladu, že při $\psi = \mathrm{konst.}$ odpovídá vztah $N(\varphi)$ gaussově křivce, a že lze chybu měření $N$ aproximovat normální distribucí. Z grafů vidíme, že křivky dobře kopírují naměřená data, předpoklady tedy zjevně byly splněny.
+
+Ačkoliv by měl zářič v jednozářičovém setupu odpovídat zářiči B ve dvouzářičovém, vidíme, že se signifikantně liší. To bylo pravděpodobně způsobeno pootočením vzorku mezi měřeními (stejný zaznamenaný úhel $\psi$ tedy odpovídal jinému natočení).
 
 
 \section{Závěr}
-Bylo to hezké. assadfasd
+Podařilo se proměřit koincidence pro různé úhly, z nich se podařilo přesně rekonstruovat polohu zářičů uvnitř vzorku (tabulka \ref{tab-average-pts}). Nepodařilo se ověřit přesnost měření tak, že by jeden zářič zůstal konstantní při obou měřeních.
 
 \section{Literatura}
 \bibliography{literatura} 
